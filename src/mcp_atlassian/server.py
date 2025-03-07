@@ -441,6 +441,7 @@ async def list_tools() -> list[Tool]:
                                 '- Set priority: {"priority": {"name": "High"}} or {"priority": null} for no priority (common values: High, Medium, Low, None)\n'
                                 '- Add labels: {"labels": ["label1", "label2"]}\n'
                                 '- Set due date: {"duedate": "2023-12-31"}\n'
+                                '- Set time tracking: {"originalEstimate": "2d 4h"} or {"remainingEstimate": "1d"}\n'
                                 '- Custom fields: {"customfield_10XXX": "value"}',
                                 "default": "{}",
                             },
@@ -468,6 +469,7 @@ async def list_tools() -> list[Tool]:
                                 "- Change status: requires transition IDs - use jira_get_issue first to see available statuses\n"
                                 '- Add labels: {"labels": ["label1", "label2"]}\n'
                                 '- Set priority: {"priority": {"name": "High"}} or {"priority": null} for no priority (common values: High, Medium, Low, None)\n'
+                                '- Set time tracking: {"originalEstimate": "2d 4h"} or {"remainingEstimate": "1d"}\n'
                                 '- Update custom fields: {"customfield_10XXX": "value"}',
                             },
                             "additional_fields": {

@@ -161,6 +161,20 @@ class JiraFetcher:
             account_id = self._get_account_id(assignee)
             fields["assignee"] = {"accountId": account_id}
 
+        # Handle time tracking specific fields
+        if "originalEstimate" in kwargs:
+            # Format time estimates properly (e.g. "2h 30m" or "2d")
+            estimate = kwargs.pop("originalEstimate")
+            fields["timetracking"] = {"originalEstimate": str(estimate)}
+        
+        if "remainingEstimate" in kwargs:
+            # Ensure timetracking dictionary exists
+            if "timetracking" not in fields:
+                fields["timetracking"] = {}
+            # Add remaining estimate to it
+            estimate = kwargs.pop("remainingEstimate")
+            fields["timetracking"]["remainingEstimate"] = str(estimate)
+
         # Remove assignee from additional_fields if present to avoid conflicts
         if "assignee" in kwargs:
             logger.warning(
@@ -204,10 +218,24 @@ class JiraFetcher:
         # Handle all kwargs
         for key, value in kwargs.items():
             fields[key] = value
-
+            
         # Convert description to Jira format if present
         if "description" in fields and fields["description"]:
             fields["description"] = self._markdown_to_jira(fields["description"])
+            
+        # Handle time tracking specific fields
+        if "originalEstimate" in fields:
+            # Format time estimates properly (e.g. "2h 30m" or "2d")
+            estimate = fields.pop("originalEstimate")
+            fields["timetracking"] = {"originalEstimate": str(estimate)}
+        
+        if "remainingEstimate" in fields:
+            # Ensure timetracking dictionary exists
+            if "timetracking" not in fields:
+                fields["timetracking"] = {}
+            # Add remaining estimate to it
+            estimate = fields.pop("remainingEstimate")
+            fields["timetracking"]["remainingEstimate"] = str(estimate)
 
         # Check if status update is requested
         if "status" in fields:
